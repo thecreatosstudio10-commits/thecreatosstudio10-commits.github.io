@@ -88,6 +88,9 @@ nav {
   border-bottom: 1px solid var(--border);
   padding: 0 40px;
 }
+/* nav has backdrop-filter, which creates a stacking context — the drawer inside it
+   cannot outrank the scrim on its own, so lift the whole bar above the scrim. */
+body.nav-open nav { z-index: 200; }
 .nav-inner {
   max-width: 1100px; margin: 0 auto;
   display: flex; align-items: center;
@@ -488,9 +491,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6.5px) rota
 
 .nav-scrim {
   position: fixed; inset: 0;
-  background: rgba(3,10,24,.72);
-  -webkit-backdrop-filter: blur(3px);
-          backdrop-filter: blur(3px);
+  background: rgba(3,10,24,.78);
   opacity: 0; visibility: hidden;
   transition: opacity .28s ease, visibility .28s;
   z-index: 190;
@@ -505,7 +506,10 @@ body.nav-open .nav-scrim { opacity: 1; visibility: visible; }
     top: 0; right: 0;
     height: 100dvh;
     width: min(78vw, 320px);
-    background: var(--bg2);
+    background: #071023;
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+    isolation: isolate;
     border-left: 1px solid var(--border2);
     box-shadow: -24px 0 60px rgba(0,0,0,.45);
     flex-direction: column;
