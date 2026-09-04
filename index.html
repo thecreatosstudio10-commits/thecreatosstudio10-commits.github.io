@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Creatos Studio — Unity, VR and AR Development</title>
+<meta name="description" content="Unity, VR and AR development studio. Networked multiplayer, enterprise XR, mobile and desktop delivery. Consulting first, build second.">
+<link rel="icon" href="creatos-logo.png">
+<link rel="apple-touch-icon" href="creatos-logo.png">
+<meta property="og:title" content="The Creatos Studio — Unity, VR and AR Development">
+<meta property="og:description" content="From first idea to final build. Networked VR, enterprise XR, mobile and desktop delivery.">
+<meta property="og:image" content="creatos-banner.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080e1b; --raise:#0c1526; --panel:#0a111f;
+  --line:#161b29; --line-hi:#1f293d;
+  --ink:#e8e8e6; --soft:#b3bccd; --mute:#6f7a91;
+  --cy:#00d2ff; --cy-dim:rgba(0,210,255,.28); --cy-bg:rgba(0,210,255,.05);
+  --display:"Space Grotesk","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --gut:clamp(1.15rem,4vw,4rem);
+}
+:root:not([data-theme="light"]){color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080e1b;--ink:#e8e8e6;--cy:#00d2ff}}
+:root[data-theme="dark"]{--bg:#080e1b;--ink:#e8e8e6;--cy:#00d2ff}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);
+  font-size:1rem;line-height:1.65;letter-spacing:-.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1340px;margin:0 auto;padding:0 var(--gut)}
+.m{font-family:var(--mono);font-size:.6563rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mute);font-weight:400}
+.cy{color:var(--cy)}
+:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+
+/* header */
+header{position:sticky;top:0;z-index:60;background:rgba(8,14,27,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:1.5rem;height:60px}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+img.glyph{width:30px;height:30px;object-fit:contain;flex:none;display:block}
+.bn{font-weight:600;font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;line-height:1.15}
+.bt{font-family:var(--mono);font-size:.5625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.pill{display:inline-flex;align-items:center;gap:.45rem;border:1px solid var(--line-hi);padding:.3rem .65rem;
+  font-family:var(--mono);font-size:.5938rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
+.dot{width:5px;height:5px;background:var(--cy);border-radius:50%;flex:none}
+nav{margin-left:auto;display:flex;gap:1.4rem;align-items:center;min-width:0}
+nav a{font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+  text-decoration:none;padding:.3rem 0;border-bottom:1px solid transparent;white-space:nowrap}
+nav a:hover{color:var(--ink);border-bottom-color:var(--cy)}
+nav a i{font-style:normal;color:var(--line-hi);margin-right:.35rem}
+nav a:hover i{color:var(--cy)}
+.cta{font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  white-space:nowrap;border:1px solid var(--cy-dim);color:var(--cy);padding:.55rem .9rem;background:var(--cy-bg);flex:none}
+.cta:hover{background:rgba(0,210,255,.12);border-color:var(--cy)}
+
+/* hero */
+.hero{position:relative;padding:clamp(2.5rem,6vw,4rem) 0 clamp(3rem,7vw,5rem);overflow:hidden}
+.mesh{position:absolute;inset:0;pointer-events:none;
+  -webkit-mask-image:radial-gradient(120% 90% at 68% 22%,#000 0%,rgba(0,0,0,.55) 42%,transparent 76%);
+  mask-image:radial-gradient(120% 90% at 68% 22%,#000 0%,rgba(0,0,0,.55) 42%,transparent 76%)}
+.mesh svg{width:100%;height:100%}
+.banner{position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:radial-gradient(115% 88% at 70% 20%,#000 0%,rgba(0,0,0,.5) 40%,transparent 74%);
+  mask-image:radial-gradient(115% 88% at 70% 20%,#000 0%,rgba(0,0,0,.5) 40%,transparent 74%)}
+.banner img{width:100%;height:100%;object-fit:cover;object-position:center;opacity:.42;filter:saturate(1.1)}
+.hero .mesh{opacity:.55}
+.mark-card .banner{-webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.7) 55%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.7) 55%,transparent 100%)}
+.mark-card .banner img{opacity:.5}
+.hero .wrap{position:relative;z-index:2}
+.tag-top{display:inline-flex;margin-bottom:clamp(2rem,6vw,4.5rem)}
+.badge{display:inline-flex;align-items:center;gap:.45rem;border:1px solid var(--cy-dim);background:var(--cy-bg);
+  padding:.35rem .7rem;font-family:var(--mono);font-size:.5938rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);margin-bottom:1.4rem}
+h1{font-size:clamp(2.5rem,6.6vw,4.75rem);line-height:1;margin:0 0 1.15rem;font-weight:500;letter-spacing:-.045em;max-width:15ch}
+.disc{display:flex;flex-wrap:wrap;gap:.55rem 1.1rem;font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--soft);margin:0 0 1.6rem}
+.disc span:not(:last-child)::after{content:"|";margin-left:1.1rem;color:var(--line-hi)}
+.lede{font-size:1.0313rem;color:var(--soft);max-width:52ch;margin:0 0 2rem;line-height:1.62}
+.hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4.6fr);gap:clamp(1.5rem,5vw,4rem);align-items:end}
+@media(max-width:1000px){.hero-grid{grid-template-columns:1fr;align-items:start}}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);margin:0 0 1.8rem;max-width:34rem}
+.tri div{padding:.85rem .95rem;border-right:1px solid var(--line)}
+.tri div:last-child{border-right:0}
+.tri b{display:block;font-weight:500;font-size:.8438rem;margin-top:.3rem;letter-spacing:-.01em}
+@media(max-width:560px){.tri{grid-template-columns:1fr}.tri div{border-right:0;border-bottom:1px solid var(--line)}.tri div:last-child{border-bottom:0}}
+.btns{display:flex;flex-wrap:wrap;gap:.75rem}
+.b1,.b2{text-decoration:none;font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.4rem;display:inline-flex;align-items:center;gap:.55rem;transition:background .18s,border-color .18s}
+.b1{background:var(--cy);color:#04121c;font-weight:500}
+.b1:hover{background:#5ce2ff}
+.b2{border:1px solid var(--line-hi);color:var(--soft)}
+.b2:hover{border-color:var(--cy);color:var(--cy)}
+.card{border:1px solid var(--line);background:var(--panel);padding:1.15rem 1.25rem}
+.card-h{display:flex;justify-content:space-between;gap:1rem;padding-bottom:.85rem;margin-bottom:.85rem;border-bottom:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:minmax(0,9.5rem) minmax(0,1fr);gap:.5rem 1rem;font-family:var(--mono);font-size:.6875rem;line-height:1.9}
+.kv dt{color:var(--mute);letter-spacing:.1em;text-transform:uppercase;font-size:.625rem}
+.kv dd{margin:0;color:var(--soft)}
+@media(max-width:400px){.kv{grid-template-columns:1fr;gap:0 0}.kv dd{margin-bottom:.5rem}}
+
+/* sections */
+section{border-top:1px solid var(--line);padding:clamp(3.25rem,6.5vw,5.5rem) 0}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+h2{font-size:clamp(1.5rem,3.1vw,2.25rem);font-weight:500;letter-spacing:-.035em;margin:.5rem 0 0;line-height:1.12}
+.note{font-family:var(--mono);font-size:.625rem;letter-spacing:.13em;text-transform:uppercase;color:var(--line-hi)}
+.sub{color:var(--mute);max-width:58ch;margin:.75rem 0 0;font-size:.9375rem}
+
+/* work rows */
+.rows{border-top:1px solid var(--line)}
+details{border-bottom:1px solid var(--line);transition:background .16s}
+details[open],details:hover{background:var(--raise)}
+summary{list-style:none;cursor:pointer;display:grid;
+  grid-template-columns:2.4rem minmax(0,15rem) minmax(0,1fr) minmax(0,15rem) 1.8rem;
+  gap:1.25rem;align-items:start;padding:1.5rem clamp(.4rem,1.2vw,1rem)}
+summary::-webkit-details-marker{display:none}
+.idx{font-family:var(--mono);font-size:.6875rem;color:var(--line-hi);padding-top:.2rem}
+details[open] .idx,details:hover .idx{color:var(--cy)}
+.rt{font-size:1.0625rem;font-weight:500;letter-spacing:-.02em;margin:0;line-height:1.35}
+.rd{color:var(--mute);font-size:.875rem;margin:0;line-height:1.6}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;align-content:flex-start}
+.tag{font-family:var(--mono);font-size:.5938rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute);
+  border:1px solid var(--line-hi);padding:.3rem .5rem;white-space:nowrap}
+details[open] .tag{color:var(--cy);border-color:var(--cy-dim);background:var(--cy-bg)}
+.plus{font-family:var(--mono);font-size:.6875rem;color:var(--line-hi);justify-self:end;padding-top:.2rem}
+details[open] .plus,details:hover .plus{color:var(--cy)}
+details[open] .plus::before{content:"[–]"}
+.plus::before{content:"[+]"}
+.body{padding:0 clamp(.4rem,1.2vw,1rem) 1.75rem;margin-left:3.65rem;max-width:74ch}
+.body p{margin:0 0 .8rem;color:var(--soft);font-size:.9063rem;line-height:1.72}
+.body p:last-child{margin:0}
+.body a{color:var(--cy)}
+@media(max-width:1000px){
+  summary{grid-template-columns:2.2rem minmax(0,1fr) 1.8rem;gap:.9rem}
+  .rd{margin-top:.5rem}.tags{margin-top:.7rem}
+  .body{margin-left:3.1rem}
+}
+@media(max-width:520px){.body{margin-left:0}}
+
+/* capabilities */
+.caps{border-top:1px solid var(--line)}
+.cap{border-bottom:1px solid var(--line);padding:2rem clamp(.4rem,1.2vw,1rem);
+  display:grid;grid-template-columns:2.4rem minmax(0,17rem) minmax(0,1fr);gap:1.25rem clamp(1rem,4vw,3rem)}
+@media(max-width:900px){.cap{grid-template-columns:2.2rem minmax(0,1fr);gap:.9rem}}
+@media(max-width:520px){.cap{grid-template-columns:1fr}}
+.cap h3{margin:0;font-size:1.0625rem;font-weight:500;letter-spacing:-.02em}
+.cap .st{font-family:var(--mono);font-size:.625rem;letter-spacing:.11em;text-transform:uppercase;color:var(--cy);margin:.4rem 0 0}
+.cap p.d{margin:0;color:var(--soft);font-size:.9063rem;line-height:1.72;max-width:64ch}
+.deliv{margin-top:1rem;border:1px solid var(--line-hi);background:var(--cy-bg);padding:.65rem .85rem;
+  font-family:var(--mono);font-size:.625rem;letter-spacing:.09em;text-transform:uppercase;color:var(--soft);line-height:1.9}
+.deliv b{color:var(--cy);font-weight:400}
+
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+@media(max-width:960px){.stack{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.stack{grid-template-columns:1fr}}
+.col{background:var(--panel);padding:1.15rem 1.15rem 1.35rem}
+.col>.m{display:block;margin-bottom:.9rem;color:var(--cy)}
+.col ul{list-style:none;margin:0;padding:0}
+.col li{display:flex;justify-content:space-between;gap:.75rem;align-items:baseline;
+  padding:.5rem 0;border-bottom:1px solid var(--line);font-size:.8438rem;color:var(--soft);letter-spacing:-.01em}
+.col li:last-child{border-bottom:0}
+.col li em{font-style:normal;font-family:var(--mono);font-size:.5625rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--line-hi);text-align:right;flex:none}
+
+/* studio */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2rem,5vw,4rem);align-items:start}
+@media(max-width:900px){.studio{grid-template-columns:1fr}}
+.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2.25rem;border-top:1px solid var(--line);padding-top:1.5rem}
+.stat b{display:block;font-size:clamp(1.6rem,3vw,2.1rem);font-weight:500;letter-spacing:-.04em;line-height:1;margin-bottom:.5rem}
+.mark-card{border:1px solid var(--line);background:var(--panel);padding:clamp(1.5rem,4vw,2.5rem);position:relative;overflow:hidden}
+.mark-card .mesh{opacity:.5}
+.mark-card .in{position:relative;z-index:2}
+.mark-card h3{margin:0 0 .35rem;font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:500;letter-spacing:-.03em}
+.mark-card p{margin:0;color:var(--soft);font-size:.9063rem}
+.mc-foot{position:relative;z-index:2;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  margin-top:clamp(2rem,5vw,3.5rem);padding-top:.9rem;border-top:1px solid var(--line)}
+
+/* contact */
+.avail{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--cy-dim);background:var(--cy-bg);
+  padding:.45rem .8rem;font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cy);margin-bottom:1.75rem}
+.big-mail{display:inline-block;font-size:clamp(1.25rem,3.4vw,2.1rem);font-weight:500;letter-spacing:-.035em;
+  text-decoration:none;border-bottom:1px solid var(--line-hi);padding-bottom:.3rem;margin:0 0 1rem;transition:color .18s,border-color .18s;word-break:break-word}
+.big-mail:hover{color:var(--cy);border-bottom-color:var(--cy)}
+.nda{border:1px solid var(--line);background:var(--panel);padding:.95rem 1.1rem;margin-top:1.75rem;
+  font-family:var(--mono);font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);line-height:1.95;max-width:46rem}
+.proto{border:1px solid var(--line);background:var(--panel);padding:1.15rem 1.25rem}
+.proto ol{list-style:none;counter-reset:p;margin:.9rem 0 0;padding:0}
+.proto li{counter-increment:p;border:1px solid var(--line);padding:.65rem .8rem;margin-bottom:.5rem;
+  font-family:var(--mono);font-size:.6563rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.proto li::before{content:counter(p) ". ";color:var(--cy)}
+.links{list-style:none;margin:1.75rem 0 0;padding:0;border-top:1px solid var(--line)}
+.links li{border-bottom:1px solid var(--line)}
+.links a{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;padding:.9rem .2rem;
+  text-decoration:none;font-size:.9375rem;transition:color .18s,padding .18s}
+.links a:hover{color:var(--cy);padding-left:.6rem}
+
+footer{border-top:1px solid var(--line)}
+.f1{display:flex;flex-wrap:wrap;gap:.75rem 2rem;align-items:center;justify-content:space-between;padding:1.5rem 0;border-bottom:1px solid var(--line)}
+.f2{display:flex;flex-wrap:wrap;gap:.75rem 2rem;align-items:center;justify-content:space-between;padding:1.25rem 0 2.75rem}
+footer a{color:var(--mute);text-decoration:none}
+footer a:hover{color:var(--ink)}
+/* ---------- responsive ---------- */
+@media(max-width:1080px){
+  .bar{flex-wrap:wrap;height:auto;padding-top:.7rem;padding-bottom:0;row-gap:.6rem;column-gap:1rem}
+  .hdr-pill{margin-left:auto}
+  .cta{order:2}
+  nav{order:3;width:100%;margin:0;gap:1.35rem;overflow-x:auto;padding:.15rem 0 .7rem;
+    border-top:1px solid var(--line);padding-top:.7rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  nav::-webkit-scrollbar{display:none}
+  nav a{padding:.2rem 0;flex:none}
+}
+@media(max-width:760px){
+  .note{display:none}
+  .sh{margin-bottom:1.9rem}
+  h1{font-size:clamp(2rem,8.6vw,2.9rem);max-width:none;letter-spacing:-.035em}
+  .hero{padding-top:2rem}
+  .tag-top{margin-bottom:1.75rem}
+  .lede{font-size:.9688rem}
+  .disc{gap:.4rem .8rem;font-size:.625rem}
+  .disc span:not(:last-child)::after{margin-left:.8rem}
+  .btns{gap:.6rem}
+  .b1,.b2{flex:1 1 100%;justify-content:center;padding:.95rem 1rem}
+  .kv{grid-template-columns:1fr;gap:0}
+  .kv dt{margin-top:.65rem}
+  .kv dd{margin:0 0 .1rem}
+  .card,.proto{padding:1rem 1.05rem}
+  summary{grid-template-columns:1.9rem minmax(0,1fr) 1.6rem;gap:.75rem;padding:1.15rem .1rem}
+  .rt{font-size:1rem}
+  .rd{font-size:.8438rem;margin-top:.45rem}
+  .tags{margin-top:.6rem;gap:.3rem}
+  .body{margin-left:2.65rem;padding:0 .1rem 1.4rem}
+  .body p{font-size:.875rem}
+  .cap{grid-template-columns:1.9rem minmax(0,1fr);gap:.7rem .75rem;padding:1.6rem .1rem}
+  .cap .d{font-size:.875rem}
+  .deliv{font-size:.5938rem;line-height:2.05;padding:.6rem .7rem}
+  .stat-row{gap:1rem;margin-top:1.75rem;padding-top:1.25rem}
+  .big-mail{font-size:clamp(1.0625rem,5.2vw,1.5rem)}
+  .links a{padding:1rem .1rem;font-size:.9063rem}
+  .nda{font-size:.5938rem;line-height:2.05;padding:.85rem .9rem}
+  .avail{white-space:normal;line-height:1.7;align-items:flex-start}
+  .avail .dot{margin-top:.5rem}
+  .mark-card{padding:1.4rem}
+  .mc-foot{margin-top:2rem}
+  .f1,.f2{flex-direction:column;align-items:flex-start;gap:.55rem}
+}
+@media(max-width:440px){
+  .bt{display:none}
+  .hdr-pill{display:none}
+  .bn{font-size:.75rem}
+  .badge{font-size:.5625rem;letter-spacing:.12em}
+  summary{grid-template-columns:1.7rem minmax(0,1fr);gap:.7rem}
+  .plus{display:none}
+  .body{margin-left:2.4rem}
+  .cap{grid-template-columns:1fr;gap:.55rem}
+  .col li{flex-wrap:wrap;gap:.15rem .6rem}
+  .col li em{text-align:left}
+  .stat-row{grid-template-columns:1fr;gap:1.15rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top">
+      <img class="glyph" src="creatos-logo.png" alt="The Creatos Studio">
+      <span><span class="bn">The Creatos Studio</span><br><span class="bt">Unity &middot; VR &middot; AR</span></span>
+    </a>
+    <span class="pill hdr-pill"><span class="dot"></span>Available for work</span>
+    <nav>
+      <a href="#work"><i>01</i>Work</a>
+      <a href="#capabilities"><i>02</i>Capabilities</a>
+      <a href="#stack"><i>03</i>Stack</a>
+      <a href="#studio"><i>04</i>Studio</a>
+      <a href="#contact"><i>05</i>Contact</a>
+    </nav>
+    <a class="cta" href="mailto:thecreatosstudio10@gmail.com">Start a project</a>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="hero">
+  <div class="banner" aria-hidden="true"><img src="creatos-banner.jpg" alt=""></div>
+  <div class="mesh" aria-hidden="true">
+    <svg viewBox="0 0 1400 620" preserveAspectRatio="xMidYMid slice">
+      <g stroke="#1c4a63" stroke-width=".7" opacity=".85">
+        <path d="M120 90 L310 180 L250 360 L60 300 Z M310 180 L520 120 L610 290 L250 360 M520 120 L740 60 L860 210 L610 290 M740 60 L980 130 L1090 40 M860 210 L1080 300 L980 130 M1080 300 L1290 200 L1360 380 M610 290 L700 470 L860 210 M700 470 L920 540 L1080 300 M250 360 L420 520 L700 470 M60 300 L180 500 L420 520 M920 540 L1150 470 L1290 200 M1150 470 L1360 380 M180 500 L340 610 M420 520 L560 600"/>
+      </g>
+      <g fill="#3aa6c9">
+        <circle cx="120" cy="90" r="2.2"/><circle cx="310" cy="180" r="2.6"/><circle cx="250" cy="360" r="2"/>
+        <circle cx="60" cy="300" r="1.8"/><circle cx="520" cy="120" r="2.4"/><circle cx="610" cy="290" r="2.8"/>
+        <circle cx="740" cy="60" r="2"/><circle cx="860" cy="210" r="2.6"/><circle cx="980" cy="130" r="2.2"/>
+        <circle cx="1090" cy="40" r="1.8"/><circle cx="1080" cy="300" r="2.6"/><circle cx="1290" cy="200" r="2.2"/>
+        <circle cx="1360" cy="380" r="2"/><circle cx="700" cy="470" r="2.4"/><circle cx="920" cy="540" r="2.2"/>
+        <circle cx="420" cy="520" r="2"/><circle cx="180" cy="500" r="1.8"/><circle cx="1150" cy="470" r="2.4"/>
+        <circle cx="340" cy="610" r="1.6"/><circle cx="560" cy="600" r="1.6"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <span class="pill tag-top"><span class="dot"></span>Studio runtime &mdash; 2026</span>
+    <div class="hero-grid">
+      <div>
+        <span class="badge">Game &amp; software development studio</span>
+        <h1>From first idea to final build.</h1>
+        <p class="disc"><span>Strategy</span><span>Development</span><span>Optimisation</span><span>Support</span></p>
+        <p class="lede">We build networked VR worlds, enterprise XR, and mobile products end to end &mdash; architecture through store submission. Nine production projects delivered across education, enterprise, retail and telecom.</p>
+        <div class="tri">
+          <div><span class="m">Engine</span><b>Unity 6.3 / URP</b></div>
+          <div><span class="m">Networking</span><b class="cy">Photon Fusion 2</b></div>
+          <div><span class="m">Delivered</span><b>9 projects</b></div>
+        </div>
+        <div class="btns">
+          <a class="b1" href="#work">Explore the work</a>
+          <a class="b2" href="mailto:thecreatosstudio10@gmail.com">Start a project</a>
+        </div>
+      </div>
+      <aside class="card">
+        <div class="card-h"><span class="m cy">[ Studio status ]</span><span class="m">Est. 2019</span></div>
+        <dl class="kv">
+          <dt>Disciplines</dt><dd>VR &middot; AR &middot; Mobile &middot; Desktop</dd>
+          <dt>Multiplayer</dt><dd class="cy">3 shipped products</dd>
+          <dt>Live on Play Store</dt><dd>176 countries</dd>
+          <dt>Timezone</dt><dd>IST &middot; UTC+5:30</dd>
+          <dt>Engagements</dt><dd>Consulting &middot; Contract &middot; Co-dev</dd>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sh">
+      <div>
+        <span class="m"><span class="cy">01</span> // Client work &amp; portfolio</span>
+        <h2>Selected productions</h2>
+        <p class="sub">Delivered for clients in education, enterprise, retail and telecom. Client names withheld here and shared on request.</p>
+      </div>
+      <span class="note">[ Open a row for build detail ]</span>
+    </div>
+
+    <div class="rows">
+
+      <details>
+        <summary>
+          <span class="idx">01</span>
+          <h3 class="rt">Metaverse social platform</h3>
+          <p class="rd">Multiplayer island world with avatar customisation, virtual land purchase and an in-world property economy.</p>
+          <span class="tags"><span class="tag">Photon Fusion 2</span><span class="tag">Multiplayer</span><span class="tag">VR</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>Persistent multiplayer world built on Photon Fusion 2. Players spawn on a shared island and move between additively streamed environments &mdash; a caf&eacute;, a dressing room where avatars are customised, and a reception hall where land and property are traded.</p>
+          <p>The economy layer covers purchasable land parcels, houses, apartments and furnishing, settled in in-world credits and persisted across sessions. The most architecturally complex project in the portfolio: networked state, ownership and scene streaming all had to hold together at once.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="idx">02</span>
+          <h3 class="rt">5G VR showcase</h3>
+          <p class="rd">Multiplayer 360&deg; solar system built as brand advertising for a major Indian telecom operator.</p>
+          <span class="tags"><span class="tag">Photon PUN</span><span class="tag">Multiplayer</span><span class="tag">VR</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>The viewer stands on a floating platform in space with the nine planets laid out radially around them in full 360&deg;. Looking at a planet surfaces its name; selecting it travels the platform to a rendered surface &mdash; the barren terrain of Mars, the pyramids and aurora on Earth &mdash; with narrated description at each destination.</p>
+          <p>Networked on Photon PUN so several viewers could share the experience. Produced as campaign content for a 5G network launch.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="idx">03</span>
+          <h3 class="rt">Security operations in VR</h3>
+          <p class="rd">An Elastic security platform rebuilt as a collaborative VR environment for a Dubai enterprise client.</p>
+          <span class="tags"><span class="tag">Unity</span><span class="tag">REST API</span><span class="tag">Enterprise XR</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>The client wanted their security operations centre to exist in VR so analysts could work inside it alongside colleagues. The full Elastic environment was integrated through its API and rendered in Unity &mdash; authentication, live error streams and threat monitoring all readable and actionable in headset.</p>
+          <p>Multi-user, so the room functioned as a shared workspace rather than a single-seat visualisation.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="idx">04</span>
+          <h3 class="rt">Retail kiosk platform</h3>
+          <p class="rd">Interactive product kiosks for a national Ayurvedic retail brand, deployed across stores in India.</p>
+          <span class="tags"><span class="tag">Unity</span><span class="tag">Backend API</span><span class="tag">Retail</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>In-store kiosk software wired into the client's existing backend over API, with a three-tier permission model covering users, admins and super-admins.</p>
+          <p>Two voiced avatar presenters walk customers through the catalogue in their own voices, giving product descriptions and pricing, with purchase completed at the kiosk.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="idx">05</span>
+          <h3 class="rt">Science education simulations</h3>
+          <p class="rd">3D physics and chemistry experiments for school students in grades 8 to 12.</p>
+          <span class="tags"><span class="tag">Unity</span><span class="tag">3D</span><span class="tag">Education</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>A library of interactive experiments replacing equipment students rarely get hands on. Animal and plant cells are explorable in 3D with every part labelled and described, and chemical reactions run as simulations students set up themselves.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="idx">06</span>
+          <h3 class="rt">Zoo AR companion</h3>
+          <p class="rd">Proximity-triggered AR that loads the animal in front of you, with 3D model, audio and description.</p>
+          <span class="tags"><span class="tag">AR</span><span class="tag">BLE Beacons</span><span class="tag">Android</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>Bluetooth beacon proximity drives the whole experience: walk up to an enclosure and the phone loads that animal in AR, in 3D, with its name, description and calls. No scanning, no searching.</p>
+          <p>Built on indoor micro-location navigation intended to generalise to zoos, malls and other venues too small for GPS. Delivered as a working prototype ahead of the beacon hardware rollout.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="idx">07</span>
+          <h3 class="rt">Snake Evolved <span class="m cy" style="margin-left:.5rem">Own IP &mdash; live</span></h3>
+          <p class="rd">2.5D isometric snake battle royale, live on Google Play in 176 countries.</p>
+          <span class="tags"><span class="tag">Unity 6.3</span><span class="tag">Android</span><span class="tag">AdMob &middot; IAP</span></span>
+          <span class="plus"></span>
+        </summary>
+        <div class="body">
+          <p>Our own title, shipped end to end. Tick-based movement on an isometric grid with depth sorting, five distinct AI opponent strategies, five power-ups with an override system, and a shrinking-arena battle royale mode alongside classic play.</p>
+          <p>Full monetisation stack &mdash; AdMob rewarded and interstitial, in-app purchase, IL2CPP builds for ARM64 and ARMv7. <a href="https://play.google.com/store/apps/details?id=com.TheCreatosStudio.SnakeEvolve">View on Google Play</a></p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<section id="capabilities">
+  <div class="wrap">
+    <div class="sh">
+      <div>
+        <span class="m"><span class="cy">02</span> // Services &amp; disciplines</span>
+        <h2>Consulting first, build second.</h2>
+        <p class="sub">Most engagements begin with an honest read on whether an approach will hold up, before a budget is committed.</p>
+      </div>
+      <span class="note">[ Strategy + dev + optimisation + support ]</span>
+    </div>
+    <div class="caps">
+
+      <div class="cap">
+        <span class="idx cy">01</span>
+        <div>
+          <h3>Technical consulting &amp; audits</h3>
+          <p class="st">Architecture, scoping, performance</p>
+        </div>
+        <div>
+          <p class="d">Architecture reviews, engine and platform decisions, scoping and estimation. Profiling for Unity projects that ship slow or crash on target hardware &mdash; draw calls, memory, build size, frame pacing. You get a prioritised fix list your own team can act on.</p>
+          <p class="deliv"><b>Deliverables:</b> Architecture review // Feasibility report // Profiling &amp; fix list // Scoping estimate</p>
+        </div>
+      </div>
+
+      <div class="cap">
+        <span class="idx cy">02</span>
+        <div>
+          <h3>Networked VR &amp; multiplayer</h3>
+          <p class="st">Photon Fusion 2 &amp; PUN</p>
+        </div>
+        <div>
+          <p class="d">Persistent worlds, avatar systems, in-world economies and shared enterprise environments. Three shipped multiplayer products across VR and desktop, including a Fusion 2 world with land ownership and cross-session persistence.</p>
+          <p class="deliv"><b>Deliverables:</b> Netcode architecture // Avatar systems // Persistent state // Shared XR environments</p>
+        </div>
+      </div>
+
+      <div class="cap">
+        <span class="idx cy">03</span>
+        <div>
+          <h3>XR, mobile &amp; desktop delivery</h3>
+          <p class="st">Quest, Android, Windows</p>
+        </div>
+        <div>
+          <p class="d">Meta Quest and PC VR, Android and iOS, Windows kiosk software with cloud backends and web dashboards. Including the unglamorous part that stalls launches &mdash; keystores, build configuration, store submission, AdMob and IAP integration, policy compliance.</p>
+          <p class="deliv"><b>Deliverables:</b> Quest &amp; PC VR builds // Play Store submission // Kiosk software // Monetisation setup</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="sh">
+      <div>
+        <span class="m"><span class="cy">03</span> // Technology matrix</span>
+        <h2>Production stack</h2>
+        <p class="sub">Tools we ship with, not tools we have read about.</p>
+      </div>
+      <span class="note">[ In production today ]</span>
+    </div>
+    <div class="stack">
+      <div class="col">
+        <span class="m">&#9632; // Engine</span>
+        <ul>
+          <li>Unity 6.3 <em>Primary</em></li>
+          <li>URP <em>2D / 3D</em></li>
+          <li>C# <em>Gameplay</em></li>
+          <li>Editor tooling <em>Pipeline</em></li>
+        </ul>
+      </div>
+      <div class="col">
+        <span class="m">&#9632; // XR &amp; networking</span>
+        <ul>
+          <li>Photon Fusion 2 <em>Shipped</em></li>
+          <li>Photon PUN <em>Shipped</em></li>
+          <li>Meta XR SDK <em>Quest 2 / 3</em></li>
+          <li>XR Interaction Toolkit <em>Input</em></li>
+        </ul>
+      </div>
+      <div class="col">
+        <span class="m">&#9632; // Backend &amp; web</span>
+        <ul>
+          <li>Firebase Auth <em>Identity</em></li>
+          <li>Firestore <em>Realtime</em></li>
+          <li>Cloud Functions <em>Serverless</em></li>
+          <li>Next.js <em>Dashboards</em></li>
+        </ul>
+      </div>
+      <div class="col">
+        <span class="m">&#9632; // Platforms</span>
+        <ul>
+          <li>Android <em>IL2CPP</em></li>
+          <li>Meta Quest 2 / 3 <em>Standalone</em></li>
+          <li>Windows &middot; C# WPF <em>Kiosk</em></li>
+          <li>AdMob &middot; Unity IAP <em>Monetisation</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="studio">
+  <div class="wrap">
+    <div class="sh">
+      <div><span class="m"><span class="cy">04</span> // About the studio</span></div>
+    </div>
+    <div class="studio">
+      <div>
+        <h2>Small team, direct line,<br>no work passed down.</h2>
+        <p class="sub" style="max-width:52ch">Founded in 2019. Every project is handled by the people who built the studio &mdash; the person you brief is the person writing the code. We take a small number of engagements at a time and say so when something is outside what we can do well.</p>
+        <div class="stat-row">
+          <div class="stat"><b>9</b><span class="m">Production projects delivered</span></div>
+          <div class="stat"><b class="cy">3</b><span class="m">Shipped multiplayer products</span></div>
+        </div>
+      </div>
+      <div class="mark-card">
+        <div class="banner" aria-hidden="true"><img src="creatos-banner.jpg" alt=""></div>
+        <div class="in">
+          <h3>The Creatos Studio</h3>
+          <p>From first idea to final build.</p>
+          <p class="m" style="margin-top:.6rem">Strategy &middot; Development &middot; Optimisation &middot; Support</p>
+        </div>
+        <div class="mc-foot">
+          <span class="m">India &mdash; working globally</span>
+          <span class="m cy">[ Est. 2019 ]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="sh">
+      <div><span class="m"><span class="cy">05</span> // Get in touch</span></div>
+    </div>
+    <span class="avail"><span class="dot"></span>Currently accepting consulting and contract work</span>
+    <div class="studio">
+      <div>
+        <h2 style="max-width:16ch">Tell us what you are building.</h2>
+        <p class="sub" style="margin-bottom:1.75rem">And what is worrying you about it. If we are not the right fit for the work, we will say so on the first call.</p>
+        <a class="big-mail" href="mailto:thecreatosstudio10@gmail.com">thecreatosstudio10@gmail.com</a>
+        <p class="m">India &middot; IST (UTC+5:30) &middot; clients worldwide</p>
+        <ul class="links">
+          <li><a href="https://wa.me/918180017859"><span>Message us directly</span><span class="m">WhatsApp</span></a></li>
+          <li><a href="https://www.youtube.com/@thecreatosstudio"><span>Project demos and showreel</span><span class="m">YouTube</span></a></li>
+          <li><a href="https://www.linkedin.com/in/ameya-jadhav-25889212a"><span>Ameya Jadhav</span><span class="m">LinkedIn</span></a></li>
+          <li><a href="https://www.linkedin.com/in/aryan-jadhav-9aa57b237"><span>Aryan Jadhav</span><span class="m">LinkedIn</span></a></li>
+        </ul>
+        <p class="nda">We sign NDAs and mutual IP protection before technical briefings. Whether you need a feasibility opinion, a netcode architecture, or a Unity project profiled before launch &mdash; start with an email.</p>
+      </div>
+      <div class="proto">
+        <span class="m cy">[ What to send us ]</span>
+        <ol>
+          <li>Project objective &amp; target platforms</li>
+          <li>Engine &amp; headset preference, if fixed</li>
+          <li>Timeline and any hard deadlines</li>
+          <li>Where you think the risk is</li>
+        </ol>
+        <p class="m" style="margin-top:.9rem">Response time: usually within 24 hours</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f1">
+    <span class="m"><span class="cy">&#9670;</span>&nbsp; The Creatos Studio &mdash; Unity, VR and AR development</span>
+    <span class="m">Strategy | Development | Optimisation | Support</span>
+  </div>
+  <div class="wrap f2">
+    <span class="m">Est. 2019 &middot; India &middot; Working with clients worldwide</span>
+    <span class="m"><a href="https://thecreatosstudio10-commits.github.io/privacy/snake-evolved">Privacy policy</a> &nbsp;&middot;&nbsp; &copy; 2026 The Creatos Studio</span>
+  </div>
+</footer>
+
+</body>
+</html>
